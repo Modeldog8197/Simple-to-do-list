@@ -60,6 +60,7 @@ export default function App(){
   }
   return(
     <>
+      <button onSubmit={createnewlists} className='new-list-button'>Create a New List</button>
       <form onSubmit={addItems}  className='new-item-form'>
         <div className="form-row">
           <label htmlFor="item" className='heading'>Add Items</label>
