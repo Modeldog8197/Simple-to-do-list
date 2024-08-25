@@ -7,6 +7,14 @@ import "./style.css"
 export default function App(){
   const [newWork , setNewWork] = useState("")
   const [lists, setLists] = useState([])
+  function createnewlist(e){
+    e.preventDefault()
+
+    newlists(newlist =>{
+      return[
+        document.getElementbyClassName('new-item-form')
+      ]
+    }
   function hideclear(e){
     document.getElementById('clear-item').style.visibility = 'hidden'
   }
