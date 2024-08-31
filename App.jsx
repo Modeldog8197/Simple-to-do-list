@@ -7,20 +7,16 @@ import "./style.css"
 export default function App(){
   const [newWork , setNewWork] = useState("")
   const [lists, setLists] = useState([])
-  function createnewlist(e){
-    e.preventDefault()
+  const [alllists, setAllLists] = useState([])
+  function addnewlist(e){
+    if(lists.length == 0)return;
+    
+    setAllLists((prevLists) => [...prevLists, lists]);
+    setLists([]);
+    setNewWork('');
+  };
 
-    newlists(newlist =>{
-      return[
-        document.getElementbyClassName('new-item-form')
-      ]
-    }
-  function hideclear(e){
-    document.getElementById('clear-item').style.visibility = 'hidden'
-  }
-  function showclear(e){
-    document.getElementById('clear-item').style.visibility = 'visible'
-  }
+
 
   function addItems(e){
     e.preventDefault()
@@ -36,7 +32,8 @@ export default function App(){
     })
 
     setNewWork("")
-  }
+    e.preventDefault()
+  };
 
   function checkbox(id, completed){
     setLists(currentLists =>{
@@ -48,35 +45,42 @@ export default function App(){
       })
     })
   }
+  function error(e){
+    e.preventDefault(e)
+    {newWork.length == 0 &&
+      setNewWork("Please enter something to do")      
+      
+    }
+  }
   function deleteitems(id){
     setLists(currentLists => {
       return currentLists.filter(list => list.id !== id)
     })
   }
-  function clearitems(id){
-    setLists(currentLists => {
-      return currentLists.filter(list => list.id == id)
-    })
+  function clearitems(){
+    setLists([]);
   }
   return(
     <>
-      <button onSubmit={createnewlists} className='new-list-button'>Create a New List</button>
-      <form onSubmit={addItems}  className='new-item-form'>
+      <form onSubmit={newWork.length>1 && addItems}  className='new-item-form'>
         <div className="form-row">
-          <label htmlFor="item" className='heading'>Add Items</label>
+          <label htmlFor="item" className='heading'>To Do List</label>
           <input 
           value = {newWork}
           onChange={e => setNewWork(e.target.value)}
           type="text" 
-          id='item' />
+          id='item'
+          placeholder='Add Item' />
         </div>
-        <button className="btn">Add To List</button>
+        <button className="btn" onClick={newWork.length==0 && error} type="submit">Add To List</button>
       </form>
+      <button id='add-new-list' onClick={() => addnewlist}>Add New List</button>
+      <br></br>
       <strong className='header'>Thing to do:</strong>
       
       <ul className="list">
-       {lists.length == 0 && "No Work To be Done!"}
-       {lists.length > 0 && showclear()}
+       {lists.length == 0 && "Nothing to do!"}
+      
        {lists.map(list =>{
         return(
           <li key={list.id}>
@@ -89,7 +93,11 @@ export default function App(){
 
         )
        })}
-       <button onClick={() =>clearitems()} className="btn btn-dangers" id='clear-item'>Clear Items</button>
+       {lists.length > 0 && ( 
+          <button onClick={() => clearitems()} className="btn btn-danger" id='clear-item'>
+            Clear Items
+          </button>
+        )}
         
       </ul>
     </>  
