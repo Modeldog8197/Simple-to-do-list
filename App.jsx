@@ -8,6 +8,8 @@ export default function App(){
   const [newWork , setNewWork] = useState("")
   const [lists, setLists] = useState([])
   const [alllists, setAllLists] = useState([])
+  const [newlistname, setNewListName] = useState("")
+
   function addnewlist(e){
     if(lists.length == 0)return;
     
@@ -15,6 +17,29 @@ export default function App(){
     setLists([]);
     setNewWork('');
   };
+  function namelist(e){
+    e.preventDefault()
+
+
+    setNewListName(currentName =>
+      {return[
+        ...currentName,
+        {
+          id: crypto.randomUUID(),
+          title: newlistname,
+          completed: false
+        }
+      ]
+  })
+    setNewListName("")
+    e.preventDefault()
+  }
+  function namelistcompleted(e){
+    e.preventDefault()
+    
+
+
+  }
 
 
 
@@ -33,7 +58,10 @@ export default function App(){
 
     setNewWork("")
     e.preventDefault()
-  };
+    required
+   
+  }
+
 
   function checkbox(id, completed){
     setLists(currentLists =>{
@@ -45,13 +73,6 @@ export default function App(){
       })
     })
   }
-  function error(e){
-    e.preventDefault(e)
-    {newWork.length == 0 &&
-      setNewWork("Please enter something to do")      
-      
-    }
-  }
   function deleteitems(id){
     setLists(currentLists => {
       return currentLists.filter(list => list.id !== id)
@@ -62,7 +83,7 @@ export default function App(){
   }
   return(
     <>
-      <form onSubmit={newWork.length>1 && addItems}  className='new-item-form'>
+      <form onSubmit={addItems}  className='new-item-form'>
         <div className="form-row">
           <label htmlFor="item" className='heading'>To Do List</label>
           <input 
@@ -70,16 +91,22 @@ export default function App(){
           onChange={e => setNewWork(e.target.value)}
           type="text" 
           id='item'
-          placeholder='Add Item' />
+
+          onKeyDownCapture={e => e.key === 'Enter' && addItems(e)}
+          
+          required
+          />
         </div>
-        <button className="btn" onClick={newWork.length==0 && error} type="submit">Add To List</button>
+        <button className="btn"  type="submit">Add To List</button>
       </form>
-      <button id='add-new-list' onClick={() => addnewlist}>Add New List</button>
       <br></br>
-      <strong className='header'>Thing to do:</strong>
+      <center><button className='btn' onClick={() => addnewlist}>Add New List</button></center>
+      <br></br>
+      <input className='header' onChange={namelist} id='item'></input>
       
       <ul className="list">
-       {lists.length == 0 && "Nothing to do!"}
+
+       {lists.length == 0 && "Nothing to do"+ " in " + ""}
       
        {lists.map(list =>{
         return(
@@ -87,7 +114,7 @@ export default function App(){
           <label>
             <input type="checkbox" checked = {list.completed} onChange={e =>checkbox(list.id, e.target.checked)}/>{list.title}
           </label>
-          <button onClick = {() =>deleteitems(list.id)} className="btn btn-danger">Delete Item</button>
+          <button onClick = {() =>deleteitems(list.id)} className="btn btn-danger"><img src="data:imagepng;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAJdJREFUSEvtlbENgCAQRR+Fm1jpCo7hEA5h7wjGHZzBAew1cRYLDYmRqMEjBqyg5ee/498BisBLBfbHBVABraUQvde9FSkBCmAAEovJCmjNaIPcAZunyE7f3wGeDmBsbD34GtXDLwLuPYsRiVMcI4oRmQSCv0UTkImJXwUzkItX+xCUQAOkjpAFqIHeFeDoK8ukP1l2EBQ77EwZGTyUyKgAAAAASUVORK5CYII="/></button>
           
         </li>
 
